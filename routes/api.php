@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,17 +16,13 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
-
-    Route::post('/logout', [AuthController::class, 'logout']);
+Route::prefix('users')->controller(AuthController::class)->group(function (){
+    Route::post('/register', 'create');
+    Route::post('/login', 'login');
 });
 
-
-
-
- //Route::get('/test', function () {
-   // return response()->json(['message' => 'API Laravel fonctionne bien !']);
-//});
+Route::prefix('users')->controller(UserController::class)->group(function (){
+    Route::get('/', 'index');
+    Route::put('/{id}', 'update');
+    Route::delete('/{id}', 'destroy');
+});

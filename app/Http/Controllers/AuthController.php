@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
      // 🔐 REGISTER
-    public function register(Request $request)
+    public function create(Request $request)
     {
         $request->validate([
             'employe_number' => 'required|digits:6|unique:users,employe_number',
