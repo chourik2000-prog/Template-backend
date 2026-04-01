@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-
 class UserController extends Controller
 {
     /**
@@ -28,19 +27,15 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        return response()->json([
+            'status' => true,
+            'data' => $user,
+            'message' => 'utilisateur retrouvé avec succès'
+        ], 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -51,7 +46,25 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::FindOrFail($id);
+
+        $validate = $request->validate([
+        'employe_number' => 'sometimes|string|max:150',
+        'password' => 'sometimes|min:4'
+        ]);
+
+        // hash password si envoyé
+        if (isset($validate['password'])) {
+            $validate['password'] = bcrypt($validate['password']);
+        }
+
+        $user->update($validate);
+
+        return response()->json([
+            'status' => true,
+            'data' => $user,
+            'message' => 'utilisateur retrouvé avec succès'
+        ], 200);
     }
 
     /**
